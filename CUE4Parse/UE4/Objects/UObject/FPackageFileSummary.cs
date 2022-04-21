@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using CUE4Parse.UE4.Assets.Objects;
@@ -186,7 +186,8 @@ namespace CUE4Parse.UE4.Objects.UObject
                 throw new ParserException("Can't load legacy UE3 file");
             }
 
-            TotalHeaderSize = Ar.Read<int>();
+            const int key = -290271545;
+            TotalHeaderSize = Ar.Read<int>() ^ key;
             FolderName = Ar.ReadFString();
             PackageFlags = Ar.Read<EPackageFlags>();
 
@@ -196,8 +197,8 @@ namespace CUE4Parse.UE4.Objects.UObject
             }*/
 
             afterPackageFlags:
-            NameCount = Ar.Read<int>();
-            NameOffset = Ar.Read<int>();
+            NameCount = Ar.Read<int>() ^ key;
+            NameOffset = Ar.Read<int>() ^ key;
 
             if (!PackageFlags.HasFlag(EPackageFlags.PKG_FilterEditorOnly))
             {
@@ -213,11 +214,11 @@ namespace CUE4Parse.UE4.Objects.UObject
                 GatherableTextDataOffset = Ar.Read<int>();
             }
 
-            ExportCount = Ar.Read<int>();
-            ExportOffset = Ar.Read<int>();
-            ImportCount = Ar.Read<int>();
-            ImportOffset = Ar.Read<int>();
-            DependsOffset = Ar.Read<int>();
+            ExportCount = Ar.Read<int>() ^ key;
+            ExportOffset = Ar.Read<int>() ^ key;
+            ImportCount = Ar.Read<int>() ^ key;
+            ImportOffset = Ar.Read<int>() ^ key;
+            DependsOffset = Ar.Read<int>() ^ key;
 
             if (FileVersionUE < EUnrealEngineObjectUE4Version.OLDEST_LOADABLE_PACKAGE || FileVersionUE > EUnrealEngineObjectUE4Version.AUTOMATIC_VERSION)
             {
@@ -327,7 +328,7 @@ namespace CUE4Parse.UE4.Objects.UObject
 
             if (FileVersionUE >= EUnrealEngineObjectUE4Version.ASSET_REGISTRY_TAGS)
             {
-                AssetRegistryDataOffset = Ar.Read<int>();
+                AssetRegistryDataOffset = Ar.Read<int>() ^ key;
             }
 
             if (Ar.Game == EGame.GAME_SeaOfThieves)

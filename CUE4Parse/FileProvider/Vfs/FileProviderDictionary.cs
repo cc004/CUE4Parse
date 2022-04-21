@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +80,8 @@ namespace CUE4Parse.FileProvider.Vfs
                     return file;
                 if (TryGetValue(path.SubstringBeforeWithLast('.') + GameFile.Ue4PackageExtensions[1], out file))
                     return file;
-                
+                if (TryGetValue(path.Replace("/plugins/hotta/content/content", "hotta/content"), out file))
+                    return file;
                 throw new KeyNotFoundException($"There is no game file with the path \"{path}\"");
             }
         }

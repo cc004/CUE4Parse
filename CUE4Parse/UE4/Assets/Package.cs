@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -37,15 +37,15 @@ namespace CUE4Parse.UE4.Assets
             var uassetAr = new FAssetArchive(uasset, this);
             Summary = new FPackageFileSummary(uassetAr);
 
-            uassetAr.SeekAbsolute(Summary.NameOffset, SeekOrigin.Begin);
+            uassetAr.SeekAbsolute((uint)Summary.NameOffset, SeekOrigin.Begin);
             NameMap = new FNameEntrySerialized[Summary.NameCount];
             uassetAr.ReadArray(NameMap, () => new FNameEntrySerialized(uassetAr));
 
-            uassetAr.SeekAbsolute(Summary.ImportOffset, SeekOrigin.Begin);
+            uassetAr.SeekAbsolute((uint) Summary.ImportOffset, SeekOrigin.Begin);
             ImportMap = new FObjectImport[Summary.ImportCount];
             uassetAr.ReadArray(ImportMap, () => new FObjectImport(uassetAr));
 
-            uassetAr.SeekAbsolute(Summary.ExportOffset, SeekOrigin.Begin);
+            uassetAr.SeekAbsolute((uint) Summary.ExportOffset, SeekOrigin.Begin);
             ExportMap = new FObjectExport[Summary.ExportCount]; // we need this to get its final size in some case
             uassetAr.ReadArray(ExportMap, () => new FObjectExport(uassetAr));
 
